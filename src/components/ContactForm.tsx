@@ -14,13 +14,22 @@ const ContactForm = () => {
   const [email, setEmail] = React.useState("");
   const [message, setMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const [feedback, setFeedback] = React.useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
+  const submissionInProgress = React.useRef(false);
 
   const { toast } = useToast();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (submissionInProgress.current) return;
+
+    submissionInProgress.current = true;
     setLoading(true);
+    setFeedback(null);
     try {
       const res = await fetch("/api/send", {
         method: "POST",
@@ -34,14 +43,19 @@ const ContactForm = () => {
         }),
       });
       const data = await res.json();
-      if (data.error) throw new Error(data.error);
+      if (!res.ok || data.error || data.resendError) {
+        throw new Error("Unable to send your message.");
+      }
       toast({
         title: "Thank you!",
         description: "I'll get back to you as soon as possible.",
         variant: "default",
         className: cn("top-0 mx-auto flex fixed md:top-4 md:right-4"),
       });
-      setLoading(false);
+      setFeedback({
+        type: "success",
+        message: "Thank you! Your message has been sent.",
+      });
       setFullName("");
       setEmail("");
       setMessage("");
@@ -50,6 +64,10 @@ const ContactForm = () => {
         clearTimeout(timer);
       }, 1000);
     } catch (err) {
+      setFeedback({
+        type: "error",
+        message: "Something went wrong. Please check the fields and try again.",
+      });
       toast({
         title: "Error",
         description: "Something went wrong! Please check the fields.",
@@ -58,8 +76,10 @@ const ContactForm = () => {
         ),
         variant: "destructive",
       });
+    } finally {
+      submissionInProgress.current = false;
+      setLoading(false);
     }
-    setLoading(false);
   };
   return (
     <form className="w-full mx-auto sm:mt-4" onSubmit={handleSubmit}>
@@ -117,6 +137,17 @@ const ContactForm = () => {
         )}
         <BottomGradient />
       </Button>
+      {feedback && (
+        <p
+          aria-live="polite"
+          className={cn(
+            "mt-3 text-sm",
+            feedback.type === "error" ? "text-destructive" : "text-accent"
+          )}
+        >
+          {feedback.message}
+        </p>
+      )}
     </form>
   );
 };

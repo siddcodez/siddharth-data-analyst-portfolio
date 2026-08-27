@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import {
   FaEnvelope,
   FaGit,
@@ -146,10 +147,12 @@ function Page() {
           >
             <div className="flex flex-row lg:flex-col items-center">
               <div className="flex justify-center items-center lg:w-full lg:aspect-square bg-secondary rounded-xl lg:mb-5 overflow-hidden">
-                <img
+                <Image
                   className="rounded-full p-2 lg:p-4 w-[100px] md:w-[150px] lg:w-[200px] aspect-square object-cover"
                   alt="Siddharth Tomar"
                   src="/assets/me.jpg"
+                  width={200}
+                  height={200}
                 />
               </div>
               <div className="flex flex-col gap-2 lg:items-center ml-6 md:ml-10 lg:ml-0">

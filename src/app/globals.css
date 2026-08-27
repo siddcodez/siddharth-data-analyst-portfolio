@@ -19,6 +19,13 @@ body {
   overflow-x: clip;
 }
 
+/* Keep the Hero below the fixed header on short desktop landscape screens. */
+@media (min-width: 768px) and (orientation: landscape) and (max-height: 500px) {
+  .hero-content {
+    transform: translateY(3.5rem);
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 3.9%;

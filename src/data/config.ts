@@ -20,7 +20,7 @@ const config = {
   ],
   author: "Siddharth Tomar",
   email: "thakursiddharthtomar@gmail.com",
-  site: "",
+  site: "https://siddharth-data-analyst-portfolio.vercel.app",
 
   // for github stars button — point at the CURRENT owner's actual repo
   githubUsername: "siddcodez",

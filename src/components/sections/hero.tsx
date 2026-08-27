@@ -31,6 +31,7 @@ const HeroSection = () => {
           className={cn(
             "h-[calc(100dvh-3rem)] md:h-[calc(100dvh-4rem)] z-[2]",
             "col-span-1",
+            "hero-content",
             "flex flex-col justify-start md:justify-center items-center md:items-start",
             // Restored pt-28 baseline for mobile portrait, with short-screen/landscape safety
             "pt-28 landscape:pt-16 max-h-[600px]:pt-16 sm:pb-16 md:p-20 lg:p-24 xl:p-28",
@@ -57,7 +58,7 @@ const HeroSection = () => {
                       <h1
                         className={cn(
                           "-ml-[6px] leading-none font-thin text-transparent text-foreground/10 text-left",
-                          "font-thin text-6xl sm:text-7xl md:text-7xl lg:text-7xl xl:text-8xl 2xl:text-9xl",
+                          "font-thin text-6xl max-[340px]:text-[3.5rem] sm:text-7xl md:text-7xl lg:text-7xl xl:text-8xl 2xl:text-9xl",
                           "cursor-default text-edge-outline font-display",
                           "break-normal"
                         )}
@@ -164,5 +165,4 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-
 
