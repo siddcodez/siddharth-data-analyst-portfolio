@@ -1,5 +1,4 @@
 import { EmailTemplate } from "@/components/email-template";
-import { config } from "@/data/config";
 import { Resend } from "resend";
 import { z } from "zod";
 
@@ -37,9 +36,20 @@ export async function POST(req: Request) {
       return Response.json({ error: zodError?.message }, { status: 400 });
 
     const resendApiKey = process.env.RESEND_API_KEY;
+    const contactRecipient = process.env.CONTACT_TO_EMAIL;
     if (!resendApiKey) {
       console.error("[contact-email] configuration error", {
         code: "RESEND_API_KEY_MISSING",
+      });
+      return Response.json(
+        { error: "Email delivery is temporarily unavailable. Please try again later." },
+        { status: 503 }
+      );
+    }
+
+    if (!contactRecipient) {
+      console.error("[contact-email] configuration error", {
+        code: "CONTACT_TO_EMAIL_MISSING",
       });
       return Response.json(
         { error: "Email delivery is temporarily unavailable. Please try again later." },
@@ -51,7 +61,7 @@ export async function POST(req: Request) {
 
     const { data: resendData, error: resendError } = await resend.emails.send({
       from: "Portfolio <onboarding@resend.dev>",
-      to: [config.email],
+      to: [contactRecipient],
       subject: "Contact me from portfolio",
       react: EmailTemplate({
         fullName: zodData.fullName,
